@@ -37,4 +37,6 @@ export function loop()
     taskPool.run();
 
     Memory['task_pool'] = taskPool;
+
+    console.log();
 }
