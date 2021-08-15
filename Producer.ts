@@ -6,4 +6,9 @@ export default abstract class Producer
     {
         return [];
     }
+
+    tick()
+    {
+        return;
+    }
 }

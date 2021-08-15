@@ -4,9 +4,9 @@ import Event    from "./Event";
 export default class UpgradeProducer extends Producer
 {
     controller  : StructureController;    
-    expireTicks : number = 25;
+    expireTicks : number = 250;
 
-    memPath     : string;
+    memPath     : string = 'lastUpgradeOrder';
 
     constructor(controller: StructureController)
     {

@@ -1,6 +1,7 @@
 import Producer from "./Producer";
 import Consumer from './Consumer';
-import Event from "./Event";
+import Event    from "./Event";
+import log from "./log";
 
 export default class EventBroker
 {
@@ -13,18 +14,44 @@ export default class EventBroker
     {
         this.producers = producers;
         this.consumers = consumers;
+    }
 
-        this.events = [];
+    tick()
+    {
+        if (!Memory['eventBroker'])
+            Memory['eventBroker'] = [];
+
+        this.events = Memory['eventBroker'];
+
+        this.produce();
+        this.consume();
+
+        log(this.events)
+        
+        Memory['eventBroker'] = this.events;
     }
 
     produce()
     {
         for (let producer of this.producers)
-            producer.produce().forEach(x => this.events.push(x));
+        {
+            producer.tick();
+            producer.produce().forEach(x => this.events.push(x) );
+        }
     }
 
     consume()
     {
+        for (let consumer of this.consumers)
+        {
+            consumer.tick();
+            let event = this.events.pop();
+            if (!event) return;
         
+            if (consumer.canConsume(event))
+                consumer.consume(event);
+            else
+                this.events.push(event)
+        }
     }
 }
