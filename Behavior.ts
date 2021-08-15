@@ -41,7 +41,7 @@ export function transfer(creep: Creep)
     const code = creep.transfer(target, RESOURCE_ENERGY);
     if (code == ERR_NOT_IN_RANGE)
         creep.moveTo(target);
-    if (creep.store.energy == 0)
+    if (creep.store.getFreeCapacity(RESOURCE_ENERGY) != 0)
         delete creep.memory['event'];
 
 }

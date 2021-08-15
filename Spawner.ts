@@ -30,9 +30,14 @@ export default class SpawnerProducer extends Producer
         return (Game.time - this.spawn.room.memory[this.memPath]) >= this.expireTicks;
     }
 
+    private spawnerFull() : boolean
+    {
+        return this.spawn.room.energyAvailable == this.spawn.room.energyCapacityAvailable;
+    }
+
     produce(): Event[]
     {
-        if (this.issuedOrderHasExpired())
+        if (this.issuedOrderHasExpired() && !this.spawnerFull())
         {
             this.spawn.room.memory[this.memPath] = Game.time;
 
