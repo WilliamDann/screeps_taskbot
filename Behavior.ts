@@ -1,7 +1,8 @@
 export const behaviors =
 {
     'collect': collect,
-    'upgrade': upgrade
+    'upgrade': upgrade,
+    'transfer': transfer
 };
 
 export function collect(creep: Creep)
@@ -26,6 +27,8 @@ export function upgrade(creep: Creep)
     const code = creep.upgradeController(target);
     if (code == ERR_NOT_IN_RANGE)
         creep.moveTo(target);
+    if (code == ERR_NOT_ENOUGH_RESOURCES)
+        delete creep.memory['event'];
 }
 
 
@@ -38,4 +41,7 @@ export function transfer(creep: Creep)
     const code = creep.transfer(target, RESOURCE_ENERGY);
     if (code == ERR_NOT_IN_RANGE)
         creep.moveTo(target);
+    if (creep.store.energy == 0)
+        delete creep.memory['event'];
+
 }

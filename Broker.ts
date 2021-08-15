@@ -26,7 +26,7 @@ export default class EventBroker
         this.produce();
         this.consume();
 
-        log(this.events)
+        log(this.events.length)
         
         Memory['eventBroker'] = this.events;
     }
