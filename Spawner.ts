@@ -1,13 +1,44 @@
-import { TaskPool } from "./TaskPool";
+import Producer from "./Producer";
+import Event    from "./Event";
 
-export default function(spawner: StructureSpawn, task_pool: TaskPool)
+export default class SpawnerProducer extends Producer
 {
-    const creeps = spawner.room.find(FIND_MY_CREEPS);
-    
-    if (creeps.length == 0)
-        return spawner.spawnCreep([WORK, CARRY, MOVE], ''+Game.time);
+    spawn       : StructureSpawn; 
+       
+    expireTicks : number = 25;
+    memPath     : string = 'lastSpawnerOrder'
 
-    // TODO upgrade creep body
-    if (task_pool.unassigned.length != 0)
-        return spawner.spawnCreep([WORK, CARRY, MOVE], ''+Game.time);
+    constructor(spawn: StructureSpawn)
+    {
+        super();
+        this.spawn = spawn;
+
+        if (!this.spawn.room.memory[this.memPath])
+            this.spawn.room.memory[this.memPath] = -1;
+    }
+
+    private noOrderIssued(): boolean
+    {
+        return this.spawn.room.memory[this.memPath] == -1;
+    }
+
+    private issuedOrderHasExpired() : boolean
+    {
+        if (this.noOrderIssued()) 
+            return true;
+
+        return (Game.time - this.spawn.room.memory[this.memPath]) >= this.expireTicks;
+    }
+
+    produce(): Event[]
+    {
+        if (this.issuedOrderHasExpired())
+        {
+            this.spawn.room.memory[this.memPath] = Game.time;
+
+            return [ new Event('transfer', { target: this.spawn.id }, Game.time+this.expireTicks) ]
+        }
+        else
+            return [];
+    }
 }
