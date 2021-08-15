@@ -16,6 +16,11 @@ export default class EventBroker
         this.consumers = consumers;
     }
 
+    private removeExpired()
+    {
+        this.events = this.events.filter(x => Game.time < x.expires)
+    }
+
     tick()
     {
         if (!Memory['eventBroker'])

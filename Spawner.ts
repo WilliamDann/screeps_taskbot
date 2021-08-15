@@ -5,7 +5,7 @@ export default class SpawnerProducer extends Producer
 {
     spawn       : StructureSpawn; 
        
-    expireTicks : number = 250;
+    expireTicks : number = 100;
     memPath     : string = 'lastSpawnerOrder'
 
     constructor(spawn: StructureSpawn)

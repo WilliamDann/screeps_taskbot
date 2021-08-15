@@ -4,7 +4,7 @@ import Event    from "./Event";
 export default class UpgradeProducer extends Producer
 {
     controller  : StructureController;    
-    expireTicks : number = 250;
+    expireTicks : number = 100;
 
     memPath     : string = 'lastUpgradeOrder';
 
